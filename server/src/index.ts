@@ -21,6 +21,22 @@ const auth: MiddlewareHandler = async (c, next) => {
 // ── Health (no auth — useful for Railway health checks) ──────────────────────
 app.get('/health', (c) => c.json({ ok: true, ts: new Date().toISOString() }));
 
+// ── Temporary APNs config debug (no auth — remove after confirming it works) ─
+app.get('/debug-apns', (c) => {
+  const key = process.env.APNS_KEY ?? '';
+  const decoded = key.startsWith('-----')
+    ? key
+    : Buffer.from(key, 'base64').toString('utf8');
+  return c.json({
+    APNS_KEY_ID:     process.env.APNS_KEY_ID     ?? 'NOT SET',
+    APNS_TEAM_ID:    process.env.APNS_TEAM_ID    ?? 'NOT SET',
+    APNS_BUNDLE_ID:  process.env.APNS_BUNDLE_ID  ?? 'NOT SET',
+    APNS_PRODUCTION: process.env.APNS_PRODUCTION ?? 'NOT SET',
+    APNS_KEY_format: decoded.startsWith('-----BEGIN') ? 'valid PEM' : 'INVALID',
+    APNS_KEY_length: key.length,
+  });
+});
+
 // ── Register device token (called by iOS app on every launch) ────────────────
 app.post('/register', auth, async (c) => {
   const { token, device_name } = await c.req.json<{ token: string; device_name?: string }>();
