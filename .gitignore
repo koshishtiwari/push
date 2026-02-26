@@ -1,0 +1,32 @@
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# ── Node ──────────────────────────────────────────────────────────────────────
+node_modules/
+server/dist/
+server/.env
+server/node_modules/
+
+# ── Xcode ─────────────────────────────────────────────────────────────────────
+ios/build/
+ios/DerivedData/
+ios/*.xcworkspace/xcuserdata/
+ios/**/*.xcuserdata/
+ios/**/*.xccheckout
+ios/**/*.moved-aside
+ios/*.xcuserstate
+ios/*.xcscmblueprint
+ios/**/xcshareddata/xcbaselines/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
