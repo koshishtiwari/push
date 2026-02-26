@@ -23,8 +23,9 @@ function getToken(): string {
     return cachedToken.value;
   }
 
-  // Support Railway-style escaped newlines in env vars
-  const privateKey = (process.env.APNS_KEY ?? '').replace(/\\n/g, '\n');
+  // Accept either raw PEM or base64-encoded PEM (avoids newline issues in Railway)
+  const raw = (process.env.APNS_KEY ?? '').replace(/\\n/g, '\n').trim();
+  const privateKey = raw.startsWith('-----') ? raw : Buffer.from(raw, 'base64').toString('utf8');
   const keyId = process.env.APNS_KEY_ID!;
   const teamId = process.env.APNS_TEAM_ID!;
 
